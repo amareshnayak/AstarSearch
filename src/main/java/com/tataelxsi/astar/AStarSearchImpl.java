@@ -31,12 +31,12 @@ public class AStarSearchImpl {
 
 	// Blocked cells are just null Cell values in grid
 	public static Cell[][] grids;
-
+	private InputFileReader readFile = new InputFileReader();
 	private static PriorityQueue<Cell> open;
-	private static boolean closed[][] = new boolean[InputFileReader.lineCount][InputFileReader.lineCount];
+	private boolean closed[][] = new boolean[readFile.lineCount][readFile.lineCount];
 	static Stack<Cell> stackToPush = new Stack<>();
-	private static Coordinates srcCoord = null;
-	private static Coordinates destCoord = null;
+	private Coordinates srcCoord = null;
+	private Coordinates destCoord = null;
 	private static Cell srcCell = null;
 	private static Cell destCell = null;
 
@@ -44,7 +44,7 @@ public class AStarSearchImpl {
 		grids[i][j] = null;
 	}
 
-	static void AStar(int grid[][], Map<String, Coordinates> srcMap, Map<String, Coordinates> destMap, Integer ROW,
+	void AStar(int grid[][], Map<String, Coordinates> srcMap, Map<String, Coordinates> destMap, Integer ROW,
 			Integer COL) {
 		srcCoord = srcMap.get("start");
 		destCoord = destMap.get("goal");
@@ -76,7 +76,7 @@ public class AStarSearchImpl {
 		tracePathSourceToGoal();
 	}
 
-	private static void tracePathSourceToGoal() {
+	private void tracePathSourceToGoal() {
 		if (closed[destCoord.getX()][destCoord.getY()]) {
 			Cell current_ = grids[destCoord.getX()][destCoord.getY()];
 			stackToPush.push(current_);
@@ -90,7 +90,7 @@ public class AStarSearchImpl {
 			System.out.println("No possible path");
 	}
 
-	private static void tracePathAndCost(int grid[][]) {
+	private void tracePathAndCost(int grid[][]) {
 		open.add(srcCell);
 		Cell current;
 
@@ -152,7 +152,7 @@ public class AStarSearchImpl {
 
 	}
 
-	static void checkAndUpdateCost(Cell current, Cell t, int cost) {
+	void checkAndUpdateCost(Cell current, Cell t, int cost) {
 		if (t == null || closed[t.Xcoordinate][t.Ycoordinate])
 			return;
 		int t_final_cost = t.heuristicCost + cost;

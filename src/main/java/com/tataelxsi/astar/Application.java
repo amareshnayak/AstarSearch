@@ -3,8 +3,6 @@ package com.tataelxsi.astar;
  * 
  */
 
-
-
 /**
  * @author amaresh
  * 15-Jun-2017
@@ -12,53 +10,56 @@ package com.tataelxsi.astar;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class Application {
 
-	private static Utility util = null;
-	static Coordinates srcCoord = null; // source coordinate
-	private static Coordinates destCoord = null; // dest coordinate
-	private static InputFileReader readFile;
-	private static int row; // num of rows for each path
-	private static int column; // num of col for each path
+	private Utility util = null;
+	Coordinates srcCoord = null; // source coordinate
+	private Coordinates destCoord = null; // dest coordinate
+	private int row; // num of rows for each path
+	private int column; // num of col for each path
 
 	public static void main(String[] args) {
 
-		String filename = "src//main//resources//config//large.txt";
-
-		readAndCalculateScore(filename); // read input file processor
-		drawPathToDestination(); // output that is draw best path from source to
-									// destination
+		System.out.println("Please enter filepath like /Users/amaresh/Desktop/demo/small_2.txt");
+		Scanner sc = new Scanner(System.in);
+		String filename = sc.nextLine();
+		Application app = new Application();
+		app.readAndCalculateScore(filename); // read input file processor
+		app.drawPathToDestination(); // output that is draw best path from
+										// source to
+										// destination
 
 	}
 
 	// read and calculate cost from source to dest
 
-	public static void readAndCalculateScore(String filename) {
+	public void readAndCalculateScore(String filename) {
 
-		readFile = new InputFileReader();
 		List<String> records = InputFileReader.readLargeMapFile(filename);
 		row = records.size();
 		column = records.get(0).length();
 		char start = '@'; // Acc to req @ will be the starting point
 		char target = 'X'; // Acc. to req. X will be destination
 
-		Map<String, Coordinates> srcMap = readFile.getLocationPoint(records, start, "start");
-		Map<String, Coordinates> destMap = readFile.getLocationPoint(records, target, "goal");
+		Map<String, Coordinates> srcMap = InputFileReader.getLocationPoint(records, start, "start");
+		Map<String, Coordinates> destMap = InputFileReader.getLocationPoint(records, target, "goal");
 		util = new Utility(row, column);
-		try{
-		readFile.convertGridValueToWeight(records, util);
-		}catch(Exception e){
+		try {
+			InputFileReader.convertGridValueToWeight(records, util);
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		if (aStarSearch(util.grid, srcMap, destMap) == true) {
-			AStarSearchImpl.AStar(util.grid, srcMap, destMap, row, column);
+			AStarSearchImpl aStarSearch = new AStarSearchImpl();
+			aStarSearch.AStar(util.grid, srcMap, destMap, row, column);
 		}
 	}
 
 	// It will draw best path from source to destination
-	public static void drawPathToDestination() {
+	public void drawPathToDestination() {
 		Stack<AStarSearchImpl.Cell> stack = AStarSearchImpl.stackToPush;
 		int stackSize = stack.size();
 		for (int k = 0; k < stackSize; k++) {
@@ -78,8 +79,7 @@ public class Application {
 	}
 
 	// check source and dest coordinates
-	private static boolean aStarSearch(int grid[][], Map<String, Coordinates> srcMap,
-			Map<String, Coordinates> destMap) {
+	private boolean aStarSearch(int grid[][], Map<String, Coordinates> srcMap, Map<String, Coordinates> destMap) {
 
 		srcCoord = srcMap.get("start");
 		if (srcCoord == null) {
