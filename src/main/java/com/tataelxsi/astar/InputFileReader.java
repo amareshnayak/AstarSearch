@@ -103,7 +103,12 @@ public static List<String> readLargeMapFile(String filename){
 			    	}else if(str=='~'){
 			    		util.grid[i][j]=0;
 			    	}else{
-			    		util.grid[i][j]=-1;
+			    		try {
+							throw new InvalidLetterException("Any value except @,X,.,*,^,~ are not allowed");
+						} catch (InvalidLetterException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 			    	}
 			    		
 			    }		

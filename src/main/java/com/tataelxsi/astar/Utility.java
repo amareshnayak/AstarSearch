@@ -8,11 +8,12 @@ package com.tataelxsi.astar;
  * 15-Jun-2017
  */
 import java.util.Map;
-
+//utility class for matrix design
 public class Utility {
 	int ROW;
 	int COL;
 	int grid[][];
+	
 
 	Utility(int ROW, int COL) {
 		this.ROW = ROW;
